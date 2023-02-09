@@ -81,6 +81,23 @@ public class CatService {
         }
     }
 
+    // Study the difference between using a try-catch block and adding throws exception to the function signature
     public static void markAsFavorite(Cat cat){
+        try {
+            // Code snippet generated from Postman
+            OkHttpClient client = new OkHttpClient().newBuilder().build();
+            MediaType mediaType = MediaType.parse("application/json");
+            RequestBody body = RequestBody.create(mediaType, "{\r\n\t\"image_id\":\""+cat.getId()+"\"\r\n}");
+            Request request = new Request.Builder()
+                    .url("https://api.thecatapi.com/v1/favourites")
+                    .method("POST", body)
+                    .addHeader("Content-Type", "application/json")
+                    .addHeader("x-api-key", cat.getApikey())
+                    .build();
+            Response response = client.newCall(request).execute();
+            System.out.println("Cat marked as favorite: " + cat.getId());
+        } catch (IOException e){
+            System.out.println(e);
+        }
     }
 }
