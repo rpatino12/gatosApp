@@ -198,5 +198,12 @@ public class CatService {
 //        System.out.println("Cat removed as favorite: " + "\n" +
 //                "\tFavorite id:" + fav.getId() + "\n" +
 //                "\tImage id: " + fav.getImage_id() + "\n");
+
+        // It's nice to know if the request was successful with the response code
+        if(response.code() == 200){
+            JOptionPane.showMessageDialog(null, "Favorite cat: " + fav.getId() + " deleted");
+        } else{
+            JOptionPane.showMessageDialog(null, "Something went wrong " + response.code());
+        }
     }
 }
