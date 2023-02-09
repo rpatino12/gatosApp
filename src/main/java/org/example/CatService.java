@@ -182,7 +182,21 @@ public class CatService {
         }
     }
 
-    public static void deleteFavorite(CatFavorites fav){
+    public static void deleteFavorite(CatFavorites fav) throws IOException {
+        // Again we get the code snippet from Postman, and change the apikey
+        // And also change the favorite id that comes after /v1/favourites/...
+        // And delete the MediaType and RequestBody because this request doesn't have a body
+        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        Request request = new Request.Builder()
+                .url("https://api.thecatapi.com/v1/favourites/"+fav.getId())
+                .method("DELETE", null)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("x-api-key", fav.getApikey())
+                .build();
+        Response response = client.newCall(request).execute();
 
+//        System.out.println("Cat removed as favorite: " + "\n" +
+//                "\tFavorite id:" + fav.getId() + "\n" +
+//                "\tImage id: " + fav.getImage_id() + "\n");
     }
 }
