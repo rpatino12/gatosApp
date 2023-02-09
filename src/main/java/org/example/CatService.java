@@ -101,4 +101,37 @@ public class CatService {
             System.out.println(e);
         }
     }
+
+    public static void showFavorites(String apikey) throws IOException {
+        // The snippet from Postman and we only change the "x-api-key" value for the String parameter apikey
+        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, "");
+        Request request = new Request.Builder()
+                .url("https://api.thecatapi.com/v1/favourites")
+                .method("GET", body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("x-api-key", apikey)
+                .build();
+        Response response = client.newCall(request).execute();
+
+        // Now we store the API response with the String type
+        String jsonResponse = response.body().string();
+
+        // And with the class Gson we will be able to manipulate the json response and parse it to Java object
+        Gson gson = new Gson();
+        CatFavorites[] catsArray = gson.fromJson(jsonResponse, CatFavorites[].class);
+
+        if (catsArray.length > 0){
+            int min = 1;
+            int max = catsArray.length;
+            // Here we get a random number contained in the array index
+            int random = (int) (Math.random() * ((max-min) - 1)) + min;
+            // Now we have to subtract one, so we get the index for the array
+            int index = random - 1;
+
+            // And here we get one random cat from the cats marked as favorite
+            CatFavorites favorite = catsArray[index];
+        }
+    }
 }

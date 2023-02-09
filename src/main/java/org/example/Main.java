@@ -18,7 +18,8 @@ public class Main {
                     CatService.showCats();
                     break;
                 case "Show favorites":
-                    System.out.println("Showing favorites...");
+                    Cat cat = new Cat();
+                    CatService.showFavorites(cat.getApikey());
                     break;
                 default:
                     break;
