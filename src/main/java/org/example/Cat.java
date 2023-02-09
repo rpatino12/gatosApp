@@ -1,8 +1,6 @@
 package org.example;
 
 public class Cat {
-    // Here we had to add a dependency called 'Dotenv' to get an environment variable from the system
-
     private String id;
     private String url;
     // The API Key given by the website (thecatapi.com) is stored in the environment variables for security
