@@ -59,9 +59,9 @@ public class CatService {
                     + "3. Go back";
 
             String[] buttons = {"Show next image", "Favorite", "Back"};
-            String idGato = cat.getId();
+            String catId = cat.getId();
             // Show the UI
-            String option = (String) JOptionPane.showInputDialog(null, menuHeader, idGato, JOptionPane.INFORMATION_MESSAGE, catIcon, buttons, buttons[0]);
+            String option = (String) JOptionPane.showInputDialog(null, menuHeader, catId, JOptionPane.INFORMATION_MESSAGE, catIcon, buttons, buttons[0]);
 
             // Now we validate the user selection
             switch (option){
@@ -105,11 +105,9 @@ public class CatService {
     public static void showFavorites(String apikey) throws IOException {
         // The snippet from Postman and we only change the "x-api-key" value for the String parameter apikey
         OkHttpClient client = new OkHttpClient().newBuilder().build();
-        MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "");
         Request request = new Request.Builder()
                 .url("https://api.thecatapi.com/v1/favourites")
-                .method("GET", body)
+                .method("GET", null)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("x-api-key", apikey)
                 .build();
@@ -126,12 +124,65 @@ public class CatService {
             int min = 1;
             int max = catsArray.length;
             // Here we get a random number contained in the array index
-            int random = (int) (Math.random() * ((max-min) - 1)) + min;
+            int random = (int) (Math.random() * ((max-min) + 1)) + min;
             // Now we have to subtract one, so we get the index for the array
             int index = random - 1;
 
             // And here we get one random cat from the cats marked as favorite
             CatFavorites favorite = catsArray[index];
+
+            // Now we need to show the cat image in the UI (this is going to be a function in the future)
+            Image image = null;
+            try {
+                // We get the url of the image from the getUrl method of the cat object
+                URL url = new URL(favorite.getImage().getUrl());
+                // Now we read the image url to load the image in the screen
+                image = ImageIO.read(url);
+
+                // Because the swing.JOptionPane class receives an image icon object we cast the image to an image icon object
+                ImageIcon catIcon = new ImageIcon(image);
+
+                // The extra step is resize the image in the case that the result image is too large
+                if (catIcon.getIconWidth() > 800){
+                    // With the Image class methods we can scale the image, so we cast again the catIcon
+                    Image catImage = catIcon.getImage();
+                    Image resize = catImage.getScaledInstance(800, 600, Image.SCALE_SMOOTH);
+
+                    // Finally we have the catIcon resized, if it was needed
+                    catIcon = new ImageIcon(resize);
+                }
+
+                // Finally we create a menu to show the cat images
+                String menuHeader = " Select an option: \n"
+                        + "1. Show another favorite \n"
+                        + "2. Delete favorite \n"
+                        + "3. Go back";
+
+                String[] buttons = {"Show next favorite", "Delete favorite", "Back"};
+                String catId = favorite.getId();
+                // Show the UI
+                String option = (String) JOptionPane.showInputDialog(null, menuHeader, catId, JOptionPane.INFORMATION_MESSAGE, catIcon, buttons, buttons[0]);
+
+                // Now we validate the user selection
+                switch (option){
+                    case "Show next favorite":
+                        showFavorites(apikey);
+                        break;
+                    case "Delete favorite":
+                        deleteFavorite(favorite);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            // We have to add an IOException
+            catch (IOException e){
+                System.err.println(e);
+            }
         }
+    }
+
+    public static void deleteFavorite(CatFavorites fav){
+
     }
 }
