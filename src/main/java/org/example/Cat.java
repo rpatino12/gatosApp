@@ -1,21 +1,19 @@
 package org.example;
 
-import io.github.cdimascio.dotenv.Dotenv;
-
 public class Cat {
     // Here we had to add a dependency called 'Dotenv' to get an environment variable from the system
-    public Dotenv dotenv = Dotenv.load();
 
-    private int id;
+    private String id;
     private String url;
-    private String apikey = dotenv.get("CATS_API_KEY"); // With the get method we get the apikey from the environment variables
+    // The API Key given by the website (thecatapi.com) is stored in the environment variables for security
+    String apikey = System.getenv("CATS_API_KEY"); // With the getenv() method we get the apikey from the environment variables
     private String image;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

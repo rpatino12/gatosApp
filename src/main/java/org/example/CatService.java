@@ -20,7 +20,7 @@ public class CatService {
         // And we have to the method throw an IOException, because this method is connecting with things external to the app
         Response response = client.newCall(request).execute();
 
-        // Now we store the response with the String type
+        // Now we store the API response with the String type
         String jsonResponse = response.body().string();
         // And we have to format the string, so we can erase the square brackets that come with the response by default
         jsonResponse = jsonResponse.substring(1, jsonResponse.length() - 1);
@@ -31,7 +31,7 @@ public class CatService {
         // Here we parse the response to the Cat type, so this Cat object has the attributes "id", "url", "image"
         Cat cat = gson.fromJson(jsonResponse, Cat.class);
 
-        // Now we need to show the cat image
+        // Now we need to show the cat image in the UI
         Image image = null;
         try {
             // We get the url of the image from the getUrl method of the cat object
@@ -52,10 +52,35 @@ public class CatService {
                 catIcon = new ImageIcon(resize);
             }
 
+            // Finally we create a menu to show the cat images
+            String menuHeader = " Select an option: \n"
+                    + "1. Show another image \n"
+                    + "2. Mark as favorite \n"
+                    + "3. Go back";
+
+            String[] buttons = {"Show next image", "Favorite", "Back"};
+            String idGato = cat.getId();
+            // Show the UI
+            String option = (String) JOptionPane.showInputDialog(null, menuHeader, idGato, JOptionPane.INFORMATION_MESSAGE, catIcon, buttons, buttons[0]);
+
+            // Now we validate the user selection
+            switch (option){
+                case "Show next image":
+                    showCats();
+                    break;
+                case "Favorite":
+                    markAsFavorite(cat);
+                    break;
+                default:
+                    break;
+            }
         }
         // We have to add an IOException
         catch (IOException e){
             System.err.println(e);
         }
+    }
+
+    public static void markAsFavorite(Cat cat){
     }
 }
