@@ -6,7 +6,7 @@ public class Cat {
     private String id;
     private String url;
     // The API Key given by the website (thecatapi.com) is stored in the environment variables for security
-    String apikey = System.getenv("CATS_API_KEY"); // With the getenv() method we get the apikey from the environment variables
+    private String apikey = System.getenv("CATS_API_KEY"); // With the getenv() method we get the apikey from the environment variables
     private String image;
 
     public String getId() {
